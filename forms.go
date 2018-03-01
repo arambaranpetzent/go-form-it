@@ -5,8 +5,8 @@
 package forms
 
 import (
-	"github.com/kirves/go-form-it/common"
-	"github.com/kirves/go-form-it/fields"
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/fields"
 	"html/template"
 	"reflect"
 	"strings"
@@ -29,12 +29,10 @@ type Form struct {
 	id           string
 	params       map[string]string
 	css          map[string]string
-	method       string
-	action       template.HTML
 }
 
 // BaseForm creates an empty form with no styling.
-func BaseForm(method, action string) *Form {
+func BaseForm() *Form {
 	tmpl, err := template.ParseFiles(formcommon.CreateUrl("templates/baseform.html"))
 	if err != nil {
 		panic(err)
@@ -49,13 +47,50 @@ func BaseForm(method, action string) *Form {
 		"",
 		map[string]string{},
 		map[string]string{},
-		method,
-		template.HTML(action),
 	}
 }
 
+//TODO -- Testing Needed.
+//Takes in a template and renders according to template.
+func CustomTemplate(templateLocation string) *Form{
+	tmpl, err := template.ParseFiles(formcommon.CreateUrl(templateLocation))
+	if err != nil{
+		panic(err)
+	}
+	return &Form{
+		make([]FormElement, 0),
+		make(map[string]int),
+		make(map[string]string),
+		formcommon.BASE,
+		tmpl,
+		[]string{},
+		"",
+		map[string]string{},
+		map[string]string{},
+	}
+}
+
+//TODO -- Testing Needed.
+//Returns a Div Element that can be popped into a form.
+func BaseDivElement() *Form{
+	tmpl, err := template.ParseFiles(formcommon.CreateUrl("templates/div.html"))
+	if err != nil{
+		panic(err)
+	}
+	return &Form{
+		make([]FormElement, 0),
+		make(map[string]int),
+		make(map[string]string),
+		formcommon.BASE,
+		tmpl,
+		[]string{},
+		"",
+		map[string]string{},
+		map[string]string{},
+	}
+}
 // BootstrapForm creates an empty form compliant with Bootstrap3 CSS, both in structure and classes.
-func BootstrapForm(method, action string) *Form {
+func BootstrapForm() *Form {
 	tmpl, err := template.ParseFiles(formcommon.CreateUrl("templates/baseform.html"))
 	if err != nil {
 		panic(err)
@@ -70,8 +105,6 @@ func BootstrapForm(method, action string) *Form {
 		"",
 		map[string]string{},
 		map[string]string{},
-		method,
-		template.HTML(action),
 	}
 }
 
@@ -80,8 +113,8 @@ func BootstrapForm(method, action string) *Form {
 // Tags can be used to drive automatic creation: change default widgets for each field, skip fields or provide additional parameters.
 // Basic field -> widget mapping is as follows: string -> textField, bool -> checkbox, time.Time -> datetimeField, int -> numberField;
 // nested structs are also converted and added to the form.
-func BaseFormFromModel(m interface{}, method, action string) *Form {
-	form := BaseForm(method, action)
+func BaseFormFromModel(m interface{}) *Form {
+	form := BaseForm()
 	for _, v := range unWindStructure(m, "") {
 		form.Elements(v)
 	}
@@ -90,8 +123,8 @@ func BaseFormFromModel(m interface{}, method, action string) *Form {
 }
 
 // Same as BaseFormFromModel but returns a Bootstrap3 compatible form.
-func BootstrapFormFromModel(m interface{}, method, action string) *Form {
-	form := BootstrapForm(method, action)
+func BootstrapFormFromModel(m interface{}) *Form {
+	form := BootstrapForm()
 	for _, v := range unWindStructure(m, "") {
 		form.Elements(v)
 	}

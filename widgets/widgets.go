@@ -6,7 +6,7 @@ package widgets
 import (
 	"bytes"
 	"fmt"
-	"github.com/kirves/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/common"
 	"html/template"
 )
 
@@ -64,6 +64,8 @@ func BaseWidget(style, inputType string) *Widget {
 		urls = append(urls, formcommon.CreateUrl("templates/%s/datetime/datetime.html"))
 	case formcommon.STATIC:
 		urls = append(urls, formcommon.CreateUrl("templates/%s/static.html"))
+	case formcommon.EMPTYDIV:
+		urls = append(urls, formcommon.CreateUrl("templates/%s/text/emptyDiv.html"))
 	case formcommon.SEARCH,
 		formcommon.TEL,
 		formcommon.URL,

@@ -2,7 +2,7 @@ package forms
 
 import (
 	"bytes"
-	"github.com/kirves/go-form-it/fields"
+	"github.com/arambaranpetzent/go-form-it/fields"
 	"html/template"
 	"reflect"
 )
@@ -23,8 +23,6 @@ func (f *Form) Render() template.HTML {
 		"id":      f.id,
 		"params":  f.params,
 		"css":     f.css,
-		"method":  f.method,
-		"action":  f.action,
 	}
 	err := f.template.Execute(buf, data)
 	if err != nil {

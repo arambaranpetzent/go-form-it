@@ -2,8 +2,8 @@ package forms
 
 import (
 	"bytes"
-	"github.com/kirves/go-form-it/common"
-	"github.com/kirves/go-form-it/fields"
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/fields"
 	"html/template"
 )
 
@@ -14,6 +14,7 @@ type FieldSetType struct {
 	tags     map[string]struct{}
 	fields   []fields.FieldInterface
 	fieldMap map[string]int
+	css map[string]string
 }
 
 // Render translates a FieldSetType into HTML code and returns it as a template.HTML object.
@@ -24,6 +25,7 @@ func (f *FieldSetType) Render() template.HTML {
 		"fields":  f.fields,
 		"classes": f.class,
 		"tags":    f.tags,
+		"css": f.css,
 	}
 	err := template.Must(template.ParseFiles(formcommon.CreateUrl("templates/fieldset.html"))).Execute(buf, data)
 	if err != nil {
@@ -41,6 +43,7 @@ func FieldSet(name string, elems ...fields.FieldInterface) *FieldSetType {
 		map[string]struct{}{},
 		elems,
 		map[string]int{},
+		map[string]string{},
 	}
 	for i, elem := range elems {
 		ret.fieldMap[elem.Name()] = i
@@ -71,6 +74,16 @@ func (f *FieldSetType) AddClass(class string) *FieldSetType {
 // RemoveClass removes the provided class from the fieldset, if it was present. Nothing is done if it was not originally present.
 func (f *FieldSetType) RemoveClass(class string) *FieldSetType {
 	delete(f.class, class)
+	return f
+}
+
+func (f *FieldSetType) AddCss(key, value string) *FieldSetType{
+	f.css[key] = value
+	return f
+}
+
+func (f *FieldSetType) RemoveCss(key string) *FieldSetType {
+	delete(f.css, key)
 	return f
 }
 

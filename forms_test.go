@@ -1,8 +1,8 @@
 package forms
 
 import (
-	"github.com/kirves/go-form-it/common"
-	"github.com/kirves/go-form-it/fields"
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/fields"
 	"testing"
 	"time"
 )

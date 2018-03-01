@@ -2,8 +2,8 @@
 package fields
 
 import (
-	"github.com/kirves/go-form-it/common"
-	"github.com/kirves/go-form-it/widgets"
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/widgets"
 	"html/template"
 	"strings"
 )
@@ -56,6 +56,7 @@ type FieldInterface interface {
 	SetSelectChoices(choices map[string][]InputChoice) FieldInterface
 	SetRadioChoices(choices []InputChoice) FieldInterface
 	SetText(text string) FieldInterface
+	SetType(t string) FieldInterface
 }
 
 // FieldWithType creates an empty field of the given type and identified by name.
@@ -66,6 +67,26 @@ func FieldWithType(name, t string) *Field {
 		name:           name,
 		class:          []string{},
 		id:             "",
+		params:         map[string]string{},
+		css:            map[string]string{},
+		label:          "",
+		labelClass:     []string{},
+		tag:            map[string]struct{}{},
+		value:          "",
+		helptext:       "",
+		errors:         []string{},
+		additionalData: map[string]interface{}{},
+	}
+}
+
+//TODO -- Testing Needed.
+func FieldWithId(name string, id string, t string) *Field{
+	return &Field{
+		fieldType: 		t,
+		Widget:         nil,
+		name:           name,
+		class:          []string{},
+		id:             id,
 		params:         map[string]string{},
 		css:            map[string]string{},
 		label:          "",
@@ -126,6 +147,11 @@ func (f *Field) Render() template.HTML {
 // AddClass adds a class to the field.
 func (f *Field) AddClass(class string) FieldInterface {
 	f.class = append(f.class, class)
+	return f
+}
+
+func (f *Field) SetType(t string) FieldInterface{
+	f.fieldType = t
 	return f
 }
 

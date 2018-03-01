@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	PACKAGE_NAME = "github.com/kirves/go-form-it"
+	PACKAGE_NAME = "github.com/arambaranpetzent/go-form-it"
 )
 
 // Input field types
@@ -39,6 +39,7 @@ const (
 	TEXTAREA       = "textarea"
 	SELECT         = "select"
 	STATIC         = "static"
+	EMPTYDIV 	   = ""
 )
 
 // Available form styles

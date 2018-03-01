@@ -2,7 +2,7 @@ package fields
 
 import (
 	"fmt"
-	"github.com/kirves/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/common"
 	"reflect"
 	"strconv"
 )
@@ -27,9 +27,18 @@ import (
 // 	Field
 // }
 
+
+func EmptyDiv(name string) *Field{
+	return FieldWithType(name, formcommon.EMPTYDIV)
+}
+
 // TextField creates a default text input field based on the provided name.
 func TextField(name string) *Field {
 	return FieldWithType(name, formcommon.TEXT)
+}
+
+func GenericTextField(name ,id string) *Field{
+	return FieldWithId(name, id, formcommon.TEXT)
 }
 
 // PasswordField creates a default password text input field based on the provided name.

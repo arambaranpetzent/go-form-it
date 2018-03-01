@@ -1,7 +1,7 @@
 package fields
 
 import (
-	"github.com/kirves/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/common"
 )
 
 // // Generic button type
