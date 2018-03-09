@@ -2,10 +2,11 @@
 package fields
 
 import (
-	"github.com/arambaranpetzent/go-form-it/common"
-	"github.com/arambaranpetzent/go-form-it/widgets"
 	"html/template"
 	"strings"
+
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/widgets"
 )
 
 // Field is a generic type containing all data associated to an input field.
@@ -80,9 +81,9 @@ func FieldWithType(name, t string) *Field {
 }
 
 //TODO -- Testing Needed.
-func FieldWithId(name string, id string, t string) *Field{
+func FieldWithId(name string, id string, t string) *Field {
 	return &Field{
-		fieldType: 		t,
+		fieldType:      t,
 		Widget:         nil,
 		name:           name,
 		class:          []string{},
@@ -150,7 +151,7 @@ func (f *Field) AddClass(class string) FieldInterface {
 	return f
 }
 
-func (f *Field) SetType(t string) FieldInterface{
+func (f *Field) SetType(t string) FieldInterface {
 	f.fieldType = t
 	return f
 }

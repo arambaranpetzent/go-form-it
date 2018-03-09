@@ -2,9 +2,10 @@ package fields
 
 import (
 	"fmt"
-	"github.com/arambaranpetzent/go-form-it/common"
 	"reflect"
 	"strconv"
+
+	"github.com/arambaranpetzent/go-form-it/common"
 )
 
 // // Text field input type.
@@ -27,9 +28,12 @@ import (
 // 	Field
 // }
 
-
-func EmptyDiv(name string) *Field{
+func EmptyDiv(name string) *Field {
 	return FieldWithType(name, formcommon.EMPTYDIV)
+}
+
+func NBSPDiv(name string) *Field {
+	return FieldWithType(name, formcommon.NBSPDIV)
 }
 
 // TextField creates a default text input field based on the provided name.
@@ -37,7 +41,7 @@ func TextField(name string) *Field {
 	return FieldWithType(name, formcommon.TEXT)
 }
 
-func GenericTextField(name ,id string) *Field{
+func GenericTextField(name, id string) *Field {
 	return FieldWithId(name, id, formcommon.TEXT)
 }
 

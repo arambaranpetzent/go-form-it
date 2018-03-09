@@ -6,8 +6,9 @@ package widgets
 import (
 	"bytes"
 	"fmt"
-	"github.com/arambaranpetzent/go-form-it/common"
 	"html/template"
+
+	"github.com/arambaranpetzent/go-form-it/common"
 )
 
 // Simple widget object that gets executed at render time.
@@ -66,6 +67,8 @@ func BaseWidget(style, inputType string) *Widget {
 		urls = append(urls, formcommon.CreateUrl("templates/%s/static.html"))
 	case formcommon.EMPTYDIV:
 		urls = append(urls, formcommon.CreateUrl("templates/%s/text/emptyDiv.html"))
+	case formcommon.NBSPDIV:
+		urls = append(urls, formcommon.CreateUrl("templates/%s/text/nbspdiv.html"))
 	case formcommon.SEARCH,
 		formcommon.TEL,
 		formcommon.URL,

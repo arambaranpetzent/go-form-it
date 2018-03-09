@@ -2,9 +2,10 @@ package forms
 
 import (
 	"bytes"
-	"github.com/arambaranpetzent/go-form-it/fields"
 	"html/template"
 	"reflect"
+
+	"github.com/arambaranpetzent/go-form-it/fields"
 )
 
 // FormElement interface defines a form object (usually a Field or a FieldSet) that can be rendered as a template.HTML object.
@@ -40,6 +41,20 @@ func (f *Form) Elements(elems ...FormElement) *Form {
 			f.addField(e.(fields.FieldInterface))
 		case reflect.ValueOf(e).Type().String() == "*forms.FieldSetType":
 			f.addFieldSet(e.(*FieldSetType))
+		}
+	}
+	return f
+}
+
+//Add Elements from an array...
+func (f *Form) AddElementsByArray(elems []FormElement) *Form {
+	for _, element := range elems {
+		t := reflect.TypeOf(element)
+		switch {
+		case t.Implements(reflect.TypeOf((*fields.FieldInterface)(nil)).Elem()):
+			f.addField(element.(fields.FieldInterface))
+		case reflect.ValueOf(element).Type().String() == "*forms.FieldSetType":
+			f.addFieldSet(element.(*FieldSetType))
 		}
 	}
 	return f

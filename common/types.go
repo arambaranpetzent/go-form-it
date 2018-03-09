@@ -39,7 +39,8 @@ const (
 	TEXTAREA       = "textarea"
 	SELECT         = "select"
 	STATIC         = "static"
-	EMPTYDIV 	   = ""
+	EMPTYDIV       = ""
+	NBSPDIV        = "nbsp"
 )
 
 // Available form styles
