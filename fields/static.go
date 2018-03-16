@@ -2,8 +2,9 @@ package fields
 
 import (
 	"fmt"
-	"github.com/arambaranpetzent/go-form-it/common"
 	"reflect"
+
+	"github.com/arambaranpetzent/go-form-it/common"
 )
 
 // // Static field type

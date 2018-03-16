@@ -41,6 +41,7 @@ const (
 	STATIC         = "static"
 	EMPTYDIV       = ""
 	NBSPDIV        = "nbsp"
+	ANCHOR         = "anchor"
 )
 
 // Available form styles

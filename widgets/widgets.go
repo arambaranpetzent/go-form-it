@@ -69,6 +69,8 @@ func BaseWidget(style, inputType string) *Widget {
 		urls = append(urls, formcommon.CreateUrl("templates/%s/text/emptyDiv.html"))
 	case formcommon.NBSPDIV:
 		urls = append(urls, formcommon.CreateUrl("templates/%s/text/nbspdiv.html"))
+	case formcommon.ANCHOR:
+		urls = append(urls, formcommon.CreateUrl("templates/%s/anchorTag.html"))
 	case formcommon.SEARCH,
 		formcommon.TEL,
 		formcommon.URL,

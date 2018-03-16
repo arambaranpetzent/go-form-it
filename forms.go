@@ -5,11 +5,12 @@
 package forms
 
 import (
-	"github.com/arambaranpetzent/go-form-it/common"
-	"github.com/arambaranpetzent/go-form-it/fields"
 	"html/template"
 	"reflect"
 	"strings"
+
+	"github.com/arambaranpetzent/go-form-it/common"
+	"github.com/arambaranpetzent/go-form-it/fields"
 )
 
 // Form methods: POST or GET.
@@ -52,9 +53,9 @@ func BaseForm() *Form {
 
 //TODO -- Testing Needed.
 //Takes in a template and renders according to template.
-func CustomTemplate(templateLocation string) *Form{
+func CustomTemplate(templateLocation string) *Form {
 	tmpl, err := template.ParseFiles(formcommon.CreateUrl(templateLocation))
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	return &Form{
@@ -72,9 +73,9 @@ func CustomTemplate(templateLocation string) *Form{
 
 //TODO -- Testing Needed.
 //Returns a Div Element that can be popped into a form.
-func BaseDivElement() *Form{
+func BaseDivElement() *Form {
 	tmpl, err := template.ParseFiles(formcommon.CreateUrl("templates/div.html"))
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	return &Form{
@@ -89,6 +90,7 @@ func BaseDivElement() *Form{
 		map[string]string{},
 	}
 }
+
 // BootstrapForm creates an empty form compliant with Bootstrap3 CSS, both in structure and classes.
 func BootstrapForm() *Form {
 	tmpl, err := template.ParseFiles(formcommon.CreateUrl("templates/baseform.html"))
@@ -176,6 +178,8 @@ func unWindStructure(m interface{}, baseName string) []fields.FieldInterface {
 				f = fields.RadioFieldFromInstance(m, i, fName)
 			case "static":
 				f = fields.StaticFieldFromInstance(m, i, fName)
+			case "anchor":
+				f = fields.AnchorFieldFromInstance(m, i, fName)
 			default:
 				switch t.Field(i).Type.String() {
 				case "string":

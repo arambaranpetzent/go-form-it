@@ -28,6 +28,12 @@ import (
 // 	Field
 // }
 
+func AnchorField(name string, content string) *Field {
+	ret := FieldWithType(name, formcommon.ANCHOR)
+	ret.SetText(content)
+	return ret
+}
+
 func EmptyDiv(name string) *Field {
 	return FieldWithType(name, formcommon.EMPTYDIV)
 }
@@ -112,5 +118,10 @@ func TextAreaFieldFromInstance(i interface{}, fieldNo int, name string) *Field {
 func HiddenFieldFromInstance(i interface{}, fieldNo int, name string) *Field {
 	ret := HiddenField(name)
 	ret.SetValue(fmt.Sprintf("%s", reflect.ValueOf(i).Field(fieldNo).String()))
+	return ret
+}
+
+func AnchorFieldFromInstance(i interface{}, fieldNo int, name string) *Field {
+	ret := AnchorField(name, fmt.Sprintf("%s", reflect.ValueOf(i).Field(fieldNo).Interface()))
 	return ret
 }

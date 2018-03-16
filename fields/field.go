@@ -15,9 +15,12 @@ type Field struct {
 	Widget         widgets.WidgetInterface // Public Widget field for widget customization
 	name           string
 	class          []string
+	outerClass     []string
 	id             string
 	params         map[string]string
+	outerParams    map[string]string
 	css            map[string]string
+	outerCss       map[string]string
 	label          string
 	labelClass     []string
 	tag            map[string]struct{}
@@ -58,6 +61,10 @@ type FieldInterface interface {
 	SetRadioChoices(choices []InputChoice) FieldInterface
 	SetText(text string) FieldInterface
 	SetType(t string) FieldInterface
+	SetOuterCss(key, value string) FieldInterface
+	AddOuterClass(class string) FieldInterface
+	RemoveOuterClass(class string) FieldInterface
+	SetOuterParam(key, value string) FieldInterface
 }
 
 // FieldWithType creates an empty field of the given type and identified by name.
@@ -67,9 +74,12 @@ func FieldWithType(name, t string) *Field {
 		Widget:         nil,
 		name:           name,
 		class:          []string{},
+		outerClass:     []string{},
 		id:             "",
 		params:         map[string]string{},
+		outerParams:    map[string]string{},
 		css:            map[string]string{},
+		outerCss:       map[string]string{},
 		label:          "",
 		labelClass:     []string{},
 		tag:            map[string]struct{}{},
@@ -87,9 +97,12 @@ func FieldWithId(name string, id string, t string) *Field {
 		Widget:         nil,
 		name:           name,
 		class:          []string{},
+		outerClass:     []string{},
 		id:             id,
 		params:         map[string]string{},
+		outerParams:    map[string]string{},
 		css:            map[string]string{},
+		outerCss:       map[string]string{},
 		label:          "",
 		labelClass:     []string{},
 		tag:            map[string]struct{}{},
@@ -113,15 +126,22 @@ func (f *Field) Name() string {
 
 func (f *Field) dataForRender() map[string]interface{} {
 	safeParams := make(map[template.HTMLAttr]string)
+	safeOuterParams := make(map[template.HTMLAttr]string)
 	for k, v := range f.params {
 		safeParams[template.HTMLAttr(k)] = v
 	}
+	for k, v := range f.outerParams {
+		safeOuterParams[template.HTMLAttr(k)] = v
+	}
 	data := map[string]interface{}{
 		"classes":      f.class,
+		"outerClasses": f.outerClass,
 		"id":           f.id,
 		"name":         f.name,
 		"params":       safeParams,
+		"outerParams":  safeOuterParams,
 		"css":          f.css,
+		"outerCss":     f.outerCss,
 		"type":         f.fieldType,
 		"label":        f.label,
 		"labelClasses": f.labelClass,
@@ -151,6 +171,11 @@ func (f *Field) AddClass(class string) FieldInterface {
 	return f
 }
 
+func (f *Field) AddOuterClass(class string) FieldInterface {
+	f.outerClass = append(f.outerClass, class)
+	return f
+}
+
 func (f *Field) SetType(t string) FieldInterface {
 	f.fieldType = t
 	return f
@@ -168,6 +193,21 @@ func (f *Field) RemoveClass(class string) FieldInterface {
 
 	if ind != -1 {
 		f.class = append(f.class[:ind], f.class[ind+1:]...)
+	}
+	return f
+}
+
+func (f *Field) RemoveOuterClass(class string) FieldInterface {
+	ind := -1
+	for i, v := range f.outerClass {
+		if v == class {
+			ind = i
+			break
+		}
+	}
+
+	if ind != -1 {
+		f.outerClass = append(f.outerClass[:ind], f.outerClass[ind+1:]...)
 	}
 	return f
 }
@@ -212,6 +252,12 @@ func (f *Field) SetParam(key, value string) FieldInterface {
 	return f
 }
 
+// SetOuterParam adds a paramter for the outer div of a field.
+func (f *Field) SetOuterParam(key, value string) FieldInterface {
+	f.outerParams[key] = value
+	return f
+}
+
 // DeleteParam removes a parameter identified by key from the field.
 func (f *Field) DeleteParam(key string) FieldInterface {
 	delete(f.params, key)
@@ -221,6 +267,11 @@ func (f *Field) DeleteParam(key string) FieldInterface {
 // AddCss adds a custom CSS style the field.
 func (f *Field) AddCss(key, value string) FieldInterface {
 	f.css[key] = value
+	return f
+}
+
+func (f *Field) SetOuterCss(key, value string) FieldInterface {
+	f.outerCss[key] = value
 	return f
 }
 
@@ -344,6 +395,7 @@ func (f *Field) SetText(text string) FieldInterface {
 		f.fieldType == formcommon.SUBMIT ||
 		f.fieldType == formcommon.RESET ||
 		f.fieldType == formcommon.STATIC ||
+		f.fieldType == formcommon.ANCHOR ||
 		f.fieldType == formcommon.TEXTAREA {
 		f.additionalData["text"] = text
 	}
