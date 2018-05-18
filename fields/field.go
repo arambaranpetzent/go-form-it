@@ -28,6 +28,8 @@ type Field struct {
 	helptext       string
 	errors         []string
 	additionalData map[string]interface{}
+	fieldVal       string
+	fieldValId     string
 }
 
 // FieldInterface defines the interface an object must implement to be used in a form. Every method returns a FieldInterface object
@@ -65,6 +67,7 @@ type FieldInterface interface {
 	AddOuterClass(class string) FieldInterface
 	RemoveOuterClass(class string) FieldInterface
 	SetOuterParam(key, value string) FieldInterface
+	SetFieldVal(id string, val string) FieldInterface
 }
 
 // FieldWithType creates an empty field of the given type and identified by name.
@@ -87,6 +90,8 @@ func FieldWithType(name, t string) *Field {
 		helptext:       "",
 		errors:         []string{},
 		additionalData: map[string]interface{}{},
+		fieldVal:       "",
+		fieldValId:     "",
 	}
 }
 
@@ -110,6 +115,8 @@ func FieldWithId(name string, id string, t string) *Field {
 		helptext:       "",
 		errors:         []string{},
 		additionalData: map[string]interface{}{},
+		fieldVal:       "",
+		fieldValId:     "",
 	}
 }
 
@@ -127,11 +134,19 @@ func (f *Field) Name() string {
 func (f *Field) dataForRender() map[string]interface{} {
 	safeParams := make(map[template.HTMLAttr]string)
 	safeOuterParams := make(map[template.HTMLAttr]string)
+	safeCSS := make(map[template.HTMLAttr]template.CSS)
+	safeOuterCSS := make(map[template.HTMLAttr]template.CSS)
 	for k, v := range f.params {
 		safeParams[template.HTMLAttr(k)] = v
 	}
 	for k, v := range f.outerParams {
 		safeOuterParams[template.HTMLAttr(k)] = v
+	}
+	for k, v := range f.css {
+		safeCSS[template.HTMLAttr(k)] = template.CSS(v)
+	}
+	for k, v := range f.outerCss {
+		safeOuterCSS[template.HTMLAttr(k)] = template.CSS(v)
 	}
 	data := map[string]interface{}{
 		"classes":      f.class,
@@ -140,8 +155,8 @@ func (f *Field) dataForRender() map[string]interface{} {
 		"name":         f.name,
 		"params":       safeParams,
 		"outerParams":  safeOuterParams,
-		"css":          f.css,
-		"outerCss":     f.outerCss,
+		"css":          safeCSS,
+		"outerCss":     safeOuterCSS,
 		"type":         f.fieldType,
 		"label":        f.label,
 		"labelClasses": f.labelClass,
@@ -149,6 +164,8 @@ func (f *Field) dataForRender() map[string]interface{} {
 		"value":        f.value,
 		"helptext":     f.helptext,
 		"errors":       f.errors,
+		"fieldVal":     f.fieldVal,
+		"fieldValId":   f.fieldValId,
 	}
 	for k, v := range f.additionalData {
 		data[k] = v
@@ -173,6 +190,12 @@ func (f *Field) AddClass(class string) FieldInterface {
 
 func (f *Field) AddOuterClass(class string) FieldInterface {
 	f.outerClass = append(f.outerClass, class)
+	return f
+}
+
+func (f *Field) SetFieldVal(id string, val string) FieldInterface {
+	f.fieldVal = val
+	f.fieldValId = id
 	return f
 }
 
