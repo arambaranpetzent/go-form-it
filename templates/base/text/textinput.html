@@ -1,4 +1,4 @@
 {{ define "main"}}<div{{if .outerCss}} style="{{range $k, $v := .outerCss}}{{$k}}: {{$v}}; {{end}}"{{end}}{{if .outerClasses}} class ="{{range .outerClasses}}{{.}} {{end}}"{{end}}{{if .outerParams}}{{range $k, $v := .outerParams}} {{$k}}="{{$v}}"{{end}}{{end}}>
 {{ if .label }}<label{{ if .labelClasses }} class="{{range .labelClasses}}{{.}} {{end}}"{{end}}{{if .id}} for="{{.id}}"{{end}}>{{.label}}</label>{{end}}<input {{ if .classes }} class="{{range .classes}}{{.}} {{end}}"{{end}}
 {{if .id}} id="{{.id}}"{{end}}{{if .params}}{{range $k, $v := .params}} {{$k}}="{{$v}}"{{end}}{{end}}{{if .css}} style="{{range $k, $v := .css}}{{$k}}: {{$v}}; {{end}}"{{end}}{{range $k,$v := .tags}} {{$k}}{{end}}{{ if .value}} value="{{.value}}"{{end}}>
-{{if .fieldVal}}<span class = "fieldToggle" id ="{{.fieldValId}}" >{{.fieldVal}}</span>{{end}}</div>{{end}}
+{{if .fieldVal}}<span class = "fieldToggle" id ="{{.fieldValId}}" {{if .fieldValStyle}} style="{{range $k, $v := .fieldValStyle}}{{$k}}: {{$v}}; {{end}}"{{end}} >{{.fieldVal}}</span>{{end}}</div>{{end}}

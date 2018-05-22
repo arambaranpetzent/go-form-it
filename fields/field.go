@@ -30,6 +30,7 @@ type Field struct {
 	additionalData map[string]interface{}
 	fieldVal       string
 	fieldValId     string
+	fieldValStyle  map[string]string
 }
 
 // FieldInterface defines the interface an object must implement to be used in a form. Every method returns a FieldInterface object
@@ -68,6 +69,7 @@ type FieldInterface interface {
 	RemoveOuterClass(class string) FieldInterface
 	SetOuterParam(key, value string) FieldInterface
 	SetFieldVal(id string, val string) FieldInterface
+	SetFieldValStyle(key, value string) FieldInterface
 }
 
 // FieldWithType creates an empty field of the given type and identified by name.
@@ -92,6 +94,7 @@ func FieldWithType(name, t string) *Field {
 		additionalData: map[string]interface{}{},
 		fieldVal:       "",
 		fieldValId:     "",
+		fieldValStyle:  map[string]string{},
 	}
 }
 
@@ -117,6 +120,7 @@ func FieldWithId(name string, id string, t string) *Field {
 		additionalData: map[string]interface{}{},
 		fieldVal:       "",
 		fieldValId:     "",
+		fieldValStyle:  map[string]string{},
 	}
 }
 
@@ -136,6 +140,7 @@ func (f *Field) dataForRender() map[string]interface{} {
 	safeOuterParams := make(map[template.HTMLAttr]string)
 	safeCSS := make(map[template.HTMLAttr]template.CSS)
 	safeOuterCSS := make(map[template.HTMLAttr]template.CSS)
+	safeFieldValCSS := make(map[template.HTMLAttr]template.CSS)
 	for k, v := range f.params {
 		safeParams[template.HTMLAttr(k)] = v
 	}
@@ -148,24 +153,28 @@ func (f *Field) dataForRender() map[string]interface{} {
 	for k, v := range f.outerCss {
 		safeOuterCSS[template.HTMLAttr(k)] = template.CSS(v)
 	}
+	for k, v := range f.fieldValStyle {
+		safeFieldValCSS[template.HTMLAttr(k)] = template.CSS(v)
+	}
 	data := map[string]interface{}{
-		"classes":      f.class,
-		"outerClasses": f.outerClass,
-		"id":           f.id,
-		"name":         f.name,
-		"params":       safeParams,
-		"outerParams":  safeOuterParams,
-		"css":          safeCSS,
-		"outerCss":     safeOuterCSS,
-		"type":         f.fieldType,
-		"label":        f.label,
-		"labelClasses": f.labelClass,
-		"tags":         f.tag,
-		"value":        f.value,
-		"helptext":     f.helptext,
-		"errors":       f.errors,
-		"fieldVal":     f.fieldVal,
-		"fieldValId":   f.fieldValId,
+		"classes":       f.class,
+		"outerClasses":  f.outerClass,
+		"id":            f.id,
+		"name":          f.name,
+		"params":        safeParams,
+		"outerParams":   safeOuterParams,
+		"css":           safeCSS,
+		"outerCss":      safeOuterCSS,
+		"type":          f.fieldType,
+		"label":         f.label,
+		"labelClasses":  f.labelClass,
+		"tags":          f.tag,
+		"value":         f.value,
+		"helptext":      f.helptext,
+		"errors":        f.errors,
+		"fieldVal":      f.fieldVal,
+		"fieldValId":    f.fieldValId,
+		"fieldValStyle": safeFieldValCSS,
 	}
 	for k, v := range f.additionalData {
 		data[k] = v
@@ -295,6 +304,11 @@ func (f *Field) AddCss(key, value string) FieldInterface {
 
 func (f *Field) SetOuterCss(key, value string) FieldInterface {
 	f.outerCss[key] = value
+	return f
+}
+
+func (f *Field) SetFieldValStyle(key, value string) FieldInterface {
+	f.fieldValStyle[key] = value
 	return f
 }
 
