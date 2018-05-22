@@ -24,11 +24,15 @@ type FieldSetType struct {
 func (f *FieldSetType) Render() template.HTML {
 	var s string
 	buf := bytes.NewBufferString(s)
+	safeCSS := make(map[template.HTMLAttr]template.CSS)
+	for k, v := range f.css {
+		safeCSS[template.HTMLAttr(k)] = template.CSS(v)
+	}
 	data := map[string]interface{}{
 		"fields":  f.fields,
 		"classes": f.class,
 		"tags":    f.tags,
-		"css":     f.css,
+		"css":     safeCSS,
 		"id":      f.id,
 		"params":  f.params,
 	}
